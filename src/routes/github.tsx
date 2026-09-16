@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight, Lock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { profile } from "@/content/profile";
 import { fetchGithubSnapshot, mergeCatalog, type CatalogRepo } from "@/lib/github";
 
@@ -95,7 +96,21 @@ function RepoRow({ item }: { item: CatalogRepo }) {
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
           <p className="font-semibold text-fg">{item.title}</p>
-          <Badge tone="muted">{item.visibility === "private" ? "private" : "public"}</Badge>
+          {item.visibility === "private" ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="inline-flex items-center">
+                  <Badge tone="muted">
+                    <Lock className="mr-1 size-3" />
+                    private
+                  </Badge>
+                </span>
+              </TooltipTrigger>
+              <TooltipContent>私人倉只顯示名稱與摘要，不含原始碼。</TooltipContent>
+            </Tooltip>
+          ) : (
+            <Badge tone="muted">public</Badge>
+          )}
           <Badge tone={item.live ? "fg" : "muted"}>{item.live ? "live" : "catalog"}</Badge>
         </div>
         <p className="mt-1 line-clamp-2 text-sm text-muted">{item.description}</p>
@@ -115,19 +130,27 @@ function RepoRow({ item }: { item: CatalogRepo }) {
             案例
           </Link>
         ) : null}
-        <a
-          href={item.url}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex h-11 items-center gap-1 px-3 text-sm text-muted hover:text-fg"
-        >
           {item.visibility === "private" ? (
-            <Lock className="size-3.5" />
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="inline-flex h-11 items-center gap-1 px-3 text-sm text-muted">
+                  <Lock className="size-3.5" />
+                  私人
+                </span>
+              </TooltipTrigger>
+              <TooltipContent>私人倉不開放原始碼連結。</TooltipContent>
+            </Tooltip>
           ) : (
-            <ArrowUpRight className="size-4" />
+            <a
+              href={item.url}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex h-11 items-center gap-1 px-3 text-sm text-muted hover:text-fg"
+            >
+              <ArrowUpRight className="size-4" />
+              GitHub
+            </a>
           )}
-          GitHub
-        </a>
       </div>
     </li>
   );

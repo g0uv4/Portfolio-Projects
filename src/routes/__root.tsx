@@ -3,6 +3,7 @@ import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import appCss from "../styles.css?url";
 
 const APP_NAME = "ZOLAND WORKS";
@@ -49,13 +50,15 @@ function RootDocument() {
       <body className="min-h-dvh bg-bg font-sans text-fg antialiased">
         <PreviewHostBridge />
         <AuthProvider>
-          <div className="flex min-h-dvh flex-col">
-            <SiteHeader />
-            <div className="flex-1">
-              <Outlet />
+          <TooltipProvider>
+            <div className="flex min-h-dvh flex-col">
+              <SiteHeader />
+              <div className="flex-1">
+                <Outlet />
+              </div>
+              <SiteFooter />
             </div>
-            <SiteFooter />
-          </div>
+          </TooltipProvider>
         </AuthProvider>
         <Scripts />
       </body>

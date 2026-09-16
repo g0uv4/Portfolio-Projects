@@ -1,11 +1,14 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Search } from "lucide-react";
 import { WorkCard } from "@/components/work-card";
+import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CATEGORY_LABEL, WORK_CATEGORIES, type WorkCategory } from "@/content/types";
-import { works } from "@/content/works";
+import { matchWork, works } from "@/content/works";
 
 type WorksSearch = {
   cat?: WorkCategory;
+  q?: string;
 };
 
 const FILTERS = ["all", ...WORK_CATEGORIES] as const;
@@ -13,29 +16,43 @@ type FilterValue = (typeof FILTERS)[number];
 
 export const Route = createFileRoute("/works/")({
   validateSearch: (search: Record<string, unknown>): WorksSearch => {
+    const next: WorksSearch = {};
     const cat = search.cat;
     if (typeof cat === "string" && WORK_CATEGORIES.includes(cat as WorkCategory)) {
-      return { cat: cat as WorkCategory };
+      next.cat = cat as WorkCategory;
     }
-    return {};
+    if (typeof search.q === "string" && search.q.trim()) {
+      next.q = search.q.trim();
+    }
+    return next;
   },
   component: WorksIndex,
 });
 
 function WorksIndex() {
-  const { cat } = Route.useSearch();
+  const { cat, q = "" } = Route.useSearch();
   const navigate = useNavigate({ from: "/works/" });
   const value: FilterValue = cat ?? "all";
-  const visible = cat ? works.filter((work) => work.category === cat) : works;
+  const visible = works.filter((work) => {
+    if (cat && work.category !== cat) return false;
+    return matchWork(work, q);
+  });
 
   function onFilter(next: string) {
-    if (next === "all") {
-      void navigate({ search: {} });
-      return;
+    const search: WorksSearch = {};
+    if (q) search.q = q;
+    if (next !== "all" && WORK_CATEGORIES.includes(next as WorkCategory)) {
+      search.cat = next as WorkCategory;
     }
-    if (WORK_CATEGORIES.includes(next as WorkCategory)) {
-      void navigate({ search: { cat: next as WorkCategory } });
-    }
+    void navigate({ search });
+  }
+
+  function onQuery(raw: string) {
+    const search: WorksSearch = {};
+    if (cat) search.cat = cat;
+    const trimmed = raw.trim();
+    if (trimmed) search.q = trimmed;
+    void navigate({ search, replace: true });
   }
 
   return (
@@ -45,7 +62,18 @@ function WorksIndex() {
         每一件是獨立案例：問題、作法、成效。沒有公開數字的項目只寫機制，不編造成效。
       </p>
 
-      <Tabs value={value} onValueChange={onFilter} className="mt-8">
+      <label className="relative mt-8 block max-w-md">
+        <span className="sr-only">搜尋作品</span>
+        <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-faint" />
+        <Input
+          defaultValue={q}
+          onChange={(event) => onQuery(event.target.value)}
+          placeholder="搜尋標題、技術棧或摘要"
+          className="pl-9"
+        />
+      </label>
+
+      <Tabs value={value} onValueChange={onFilter} className="mt-6">
         <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:overflow-visible sm:px-0">
           <TabsList aria-label="類型篩選" className="flex-nowrap">
             {FILTERS.map((key) => (
@@ -59,7 +87,7 @@ function WorksIndex() {
 
         <TabsContent value={value}>
           {visible.length === 0 ? (
-            <p className="py-10 text-sm text-muted">這個類型還沒有登錄作品。</p>
+            <p className="py-10 text-sm text-muted">沒有符合的作品。</p>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2">
               {visible.map((work) => (

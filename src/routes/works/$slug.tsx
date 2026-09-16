@@ -1,10 +1,25 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
-import { MetricGrid } from "@/components/metric-grid";
+import { CaseToc } from "@/components/case-toc";
+import { MetricTable } from "@/components/metric-table";
+import { ProcessSteps } from "@/components/process-steps";
 import { WorkCard } from "@/components/work-card";
+import { WorkShot } from "@/components/work-shot";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { CATEGORY_LABEL, STATUS_LABEL } from "@/content/types";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Separator } from "@/components/ui/separator";
+import { CATEGORY_LABEL, PIPELINE_LABEL, STATUS_LABEL } from "@/content/types";
 import { getWork, relatedWorks } from "@/content/works";
 
 export const Route = createFileRoute("/works/$slug")({
@@ -27,23 +42,37 @@ export const Route = createFileRoute("/works/$slug")({
 
 function WorkDetail() {
   const { work, related } = Route.useLoaderData();
-  const githubUrl = work.github
-    ? `https://github.com/${work.github.owner}/${work.github.repo}`
-    : null;
 
   return (
-    <main className="wrap py-10 sm:py-14">
-      <Link
-        to="/works"
-        className="inline-flex h-11 items-center gap-1.5 text-sm text-muted hover:text-accent"
-      >
-        <ArrowLeft className="size-4" />
-        作品庫
-      </Link>
+    <main className="wrap py-8 sm:py-10">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <Link to="/works" className="hover:text-accent">
+              作品庫
+            </Link>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <Link
+              to="/works"
+              search={{ cat: work.category }}
+              className="hover:text-accent"
+            >
+              {CATEGORY_LABEL[work.category]}
+            </Link>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>{work.title}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
 
       <header className="mt-4 max-w-3xl">
         <div className="flex flex-wrap items-center gap-2">
           <Badge tone="muted">{CATEGORY_LABEL[work.category]}</Badge>
+          <Badge tone="muted">{PIPELINE_LABEL[work.pipeline]}</Badge>
           <Badge tone="muted">{work.year}</Badge>
           <Badge tone="fg">{STATUS_LABEL[work.status]}</Badge>
         </div>
@@ -52,80 +81,79 @@ function WorkDetail() {
         <p className="mt-4 text-sm leading-relaxed text-muted">{work.summary}</p>
       </header>
 
-      <section className="mt-12 max-w-3xl space-y-10">
-        <div>
-          <h2 className="text-xl font-semibold">問題</h2>
-          <p className="mt-3 text-sm leading-relaxed text-muted">{work.problem.context}</p>
-          <p className="mt-3 text-sm leading-relaxed text-muted">{work.problem.pain}</p>
-        </div>
-        <div>
-          <h2 className="text-xl font-semibold">作法</h2>
-          <p className="mt-3 text-sm leading-relaxed text-muted">{work.approach.overview}</p>
-        </div>
-        <div>
-          <h2 className="text-xl font-semibold">成效</h2>
-          <p className="mt-3 text-sm leading-relaxed text-muted">{work.results.narrative}</p>
-          <div className="mt-6">
-            <MetricGrid metrics={work.results.metrics} />
-          </div>
+      <div className="mt-8">
+        <WorkShot work={work} />
+      </div>
+
+      <CaseToc work={work} />
+
+      <section id="problem" className="mt-10 max-w-3xl scroll-mt-32">
+        <h2 className="text-xl font-semibold">問題</h2>
+        <p className="mt-3 text-sm leading-relaxed text-muted">{work.problem.context}</p>
+        <p className="mt-3 text-sm leading-relaxed text-muted">{work.problem.pain}</p>
+      </section>
+
+      <Separator className="mt-10 max-w-3xl" />
+
+      <section id="approach" className="mt-10 max-w-3xl scroll-mt-32">
+        <h2 className="text-xl font-semibold">作法</h2>
+        <p className="mt-3 text-sm leading-relaxed text-muted">{work.approach.overview}</p>
+      </section>
+
+      <section id="results" className="mt-10 max-w-3xl scroll-mt-32">
+        <h2 className="text-xl font-semibold">成效</h2>
+        <p className="mt-3 text-sm leading-relaxed text-muted">{work.results.narrative}</p>
+        <div className="mt-6">
+          <MetricTable
+            metrics={work.results.metrics}
+            caption="沒有公開數字的列只寫機制，不編造成效。"
+          />
         </div>
       </section>
 
-      <section className="mt-14 grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(16rem,0.6fr)]">
-        <article>
-          <h2 className="text-xl font-semibold">怎麼做</h2>
-          <ol className="mt-4 space-y-4">
-            {work.approach.steps.map((step, i) => (
-              <li key={step} className="flex gap-3 text-sm leading-relaxed text-muted">
-                <span className="mt-0.5 font-mono text-xs tabular-nums text-faint">
-                  {i + 1}
-                </span>
-                <span>{step}</span>
-              </li>
-            ))}
-          </ol>
-          <ul className="mt-6 flex flex-wrap gap-2">
-            {work.highlights.map((item) => (
-              <li key={item}>
-                <Badge tone="muted">{item}</Badge>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-8 flex flex-wrap gap-3">
-            {githubUrl ? (
-              <Button asChild variant="outline">
-                <a href={githubUrl} target="_blank" rel="noreferrer">
-                  {work.github?.visibility === "private" ? "私人倉" : "GitHub"}
-                  <ArrowUpRight className="size-4" />
-                </a>
-              </Button>
-            ) : null}
-            {work.liveUrl ? (
-              <Button asChild>
-                <a href={work.liveUrl} target="_blank" rel="noreferrer">
-                  正式站
-                  <ArrowUpRight className="size-4" />
-                </a>
-              </Button>
-            ) : null}
-          </div>
-        </article>
-        <dl>
-          <Side dt="技術棧" dd={work.stack.join(" · ")} />
-          {work.github ? (
-            <Side
-              dt="倉庫"
-              dd={`${work.github.owner}/${work.github.repo}（${work.github.visibility === "private" ? "私人" : "公開"}）`}
-            />
-          ) : null}
-          <Side dt="年份" dd={work.year} />
-          <Side dt="狀態" dd={STATUS_LABEL[work.status]} />
-        </dl>
-      </section>
+      <Accordion type="multiple" className="mt-10 max-w-3xl">
+        <AccordionItem value="method">
+          <AccordionTrigger>作法步驟</AccordionTrigger>
+          <AccordionContent>
+            <div id="method" className="scroll-mt-32">
+              <ProcessSteps steps={work.approach.steps} />
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="meta">
+          <AccordionTrigger>技術與倉庫</AccordionTrigger>
+          <AccordionContent>
+            <dl>
+              <Side dt="技術棧" dd={work.stack.join(" · ")} />
+              {work.github ? (
+                <Side
+                  dt="倉庫"
+                  dd={`${work.github.owner}/${work.github.repo}（${work.github.visibility === "private" ? "私人" : "公開"}）`}
+                />
+              ) : null}
+              <Side dt="產線" dd={PIPELINE_LABEL[work.pipeline]} />
+              <Side dt="年份" dd={work.year} />
+              <Side dt="狀態" dd={STATUS_LABEL[work.status]} />
+            </dl>
+            <ul className="mt-4 flex flex-wrap gap-2">
+              {work.highlights.map((item) => (
+                <li key={item}>
+                  <Badge tone="muted">{item}</Badge>
+                </li>
+              ))}
+            </ul>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
 
       {related.length > 0 ? (
-        <section className="mt-16">
-          <h2 className="text-xl font-semibold tracking-tight">相關作品</h2>
+        <section className="no-print mt-16">
+          <h2 className="text-xl font-semibold tracking-tight">
+            同一產線
+            <span className="ml-2 text-sm font-normal text-faint">
+              {PIPELINE_LABEL[work.pipeline]}
+            </span>
+          </h2>
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             {related.map((item) => (
               <WorkCard key={item.slug} work={item} compact />

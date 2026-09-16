@@ -10,6 +10,7 @@ export const works: Work[] = [
     title: "PSI Dashboard",
     subtitle: "物料規劃工作台",
     category: "web",
+    pipeline: "planning",
     status: "production",
     year: "2026",
     stack: ["JavaScript", "Cloudflare Pages", "D1", "R2"],
@@ -50,6 +51,7 @@ export const works: Work[] = [
     title: "VSR Dashboard",
     subtitle: "簽核意見與供需圖表",
     category: "web",
+    pipeline: "planning",
     status: "production",
     year: "2026",
     stack: ["HTML", "Cloudflare Pages", "R2"],
@@ -89,6 +91,7 @@ export const works: Work[] = [
     title: "Backlog 交期比對",
     subtitle: "原廠 Open Order 交期",
     category: "vba",
+    pipeline: "etd",
     status: "production",
     year: "2026",
     stack: ["VBA", "VBScript", "Python", "pandas"],
@@ -132,6 +135,7 @@ export const works: Work[] = [
     title: "Outlook 附件收取",
     subtitle: "Backlog 與出貨通知",
     category: "automation",
+    pipeline: "etd",
     status: "production",
     year: "2026",
     stack: ["Outlook VBA", "Excel"],
@@ -174,6 +178,7 @@ export const works: Work[] = [
     title: "採購單數量調整",
     subtitle: "出貨清單回寫數量與金額",
     category: "desktop",
+    pipeline: "ops",
     status: "production",
     year: "2026",
     stack: ["Python", "openpyxl", "Windows"],
@@ -217,6 +222,7 @@ export const works: Work[] = [
     title: "Excel 解法室",
     subtitle: "用訪談整理 VBA 需求",
     category: "web",
+    pipeline: "lab",
     status: "lab",
     year: "2026",
     stack: ["TypeScript", "vinext", "D1"],
@@ -253,6 +259,7 @@ export const works: Work[] = [
     title: "Date Code 檢查",
     subtitle: "出貨通知超過一年警示",
     category: "vba",
+    pipeline: "etd",
     status: "production",
     year: "2026",
     stack: ["VBScript", "Excel"],
@@ -288,6 +295,7 @@ export const works: Work[] = [
     title: "Backlog 合併",
     subtitle: "多份 Open Order 合成一表",
     category: "vba",
+    pipeline: "etd",
     status: "production",
     year: "2026",
     stack: ["VBScript", "Excel"],
@@ -323,6 +331,7 @@ export const works: Work[] = [
     title: "Oracle SQL 對帳",
     subtitle: "採購與庫存查詢集",
     category: "data",
+    pipeline: "ops",
     status: "production",
     year: "2026",
     stack: ["PL/SQL", "Oracle"],
@@ -357,6 +366,7 @@ export const works: Work[] = [
     title: "現場 VBA 工具箱",
     subtitle: "對帳、調貨、補單、對照表",
     category: "vba",
+    pipeline: "ops",
     status: "active",
     year: "2026",
     stack: ["VBA", "Excel"],
@@ -407,14 +417,27 @@ export function worksByCategory(category?: WorkCategory | "all"): Work[] {
   return works.filter((work) => work.category === category);
 }
 
+export function matchWork(work: Work, query: string): boolean {
+  const q = query.trim().toLowerCase();
+  if (!q) return true;
+  const hay = [
+    work.title,
+    work.subtitle,
+    work.summary,
+    work.stack.join(" "),
+    work.highlights.join(" "),
+  ]
+    .join(" ")
+    .toLowerCase();
+  return hay.includes(q);
+}
+
 export function relatedWorks(work: Work, limit = 3): Work[] {
-  return works
-    .filter((item) => item.slug !== work.slug)
-    .sort((a, b) => {
-      const aSame = a.category === work.category ? 1 : 0;
-      const bSame = b.category === work.category ? 1 : 0;
-      return bSame - aSame;
-    })
+  const rest = works.filter((item) => item.slug !== work.slug);
+  const samePipe = rest.filter((item) => item.pipeline === work.pipeline);
+  if (samePipe.length > 0) return samePipe.slice(0, limit);
+  return rest
+    .filter((item) => item.category === work.category)
     .slice(0, limit);
 }
 

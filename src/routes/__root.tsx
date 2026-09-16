@@ -17,7 +17,7 @@ export const Route = createRootRoute({
       {
         name: "description",
         content:
-          "力華暐的作品庫。把現場流程做成可交接的系統：問題、作法、量化成效。",
+          "Zoland Li 的作品庫。把現場流程做成可交接的系統：問題、作法、量化成效。",
       },
       { name: "theme-color", content: "#F4F7FB" },
     ],

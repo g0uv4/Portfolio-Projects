@@ -63,7 +63,7 @@ function GithubPage() {
           />
           <div className="min-w-0">
             <p className="font-medium text-fg">
-              {snapshot.profile.name ?? snapshot.profile.login}
+              {snapshot.profile.login}
             </p>
             <p className="truncate text-sm text-muted">
               {snapshot.profile.bio ?? "g0uv4 on GitHub"}

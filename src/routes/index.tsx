@@ -20,7 +20,7 @@ function Home() {
             把現場流程做成可交接的系統。
           </h1>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-muted">
-            {profile.name}／{profile.latin}。{profile.tagline}
+            {profile.latin}。{profile.tagline}
           </p>
           <div className="mt-8">
             <Button asChild>

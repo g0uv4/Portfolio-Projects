@@ -16,6 +16,10 @@ export const CATEGORY_LABEL: Record<WorkCategory, string> = {
   data: "資料",
 };
 
+export type WorkLiveLink =
+  | { kind: "internal"; to: "/psi-demo"; label: string }
+  | { kind: "external"; href: string; label?: string };
+
 export type WorkStatus = "production" | "active" | "lab";
 
 export const STATUS_LABEL: Record<WorkStatus, string> = {
@@ -56,7 +60,7 @@ export type Work = {
     repo: string;
     visibility: "public" | "private";
   };
-  liveUrl?: string;
+  live?: WorkLiveLink;
   summary: string;
   problem: {
     context: string;

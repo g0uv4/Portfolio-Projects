@@ -1,7 +1,8 @@
 import { ArrowUpRight, Lock } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import type { Work } from "@/content/types";
+import type { Work, WorkLiveLink } from "@/content/types";
 import { cn } from "@/lib/utils";
 
 const LINKS = [
@@ -56,16 +57,33 @@ export function CaseToc({ work }: { work: Work }) {
               </Button>
             )
           ) : null}
-          {work.liveUrl ? (
-            <Button asChild size="sm">
-              <a href={work.liveUrl} target="_blank" rel="noreferrer">
-                正式站
-                <ArrowUpRight className="size-4" />
-              </a>
-            </Button>
-          ) : null}
+          {work.live ? <WorkLiveLink live={work.live} /> : null}
         </div>
       </div>
     </div>
   );
+}
+
+function WorkLiveLink({ live }: { live: WorkLiveLink }) {
+  switch (live.kind) {
+    case "internal":
+      return (
+        <Button asChild size="sm">
+          <Link to={live.to}>{live.label}</Link>
+        </Button>
+      );
+    case "external":
+      return (
+        <Button asChild size="sm">
+          <a href={live.href} target="_blank" rel="noreferrer">
+            {live.label ?? "正式站"}
+            <ArrowUpRight className="size-4" />
+          </a>
+        </Button>
+      );
+    default: {
+      const _exhaustive: never = live;
+      return _exhaustive;
+    }
+  }
 }

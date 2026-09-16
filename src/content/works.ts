@@ -16,7 +16,7 @@ export const works: Work[] = [
     stack: ["JavaScript", "Cloudflare Pages", "D1", "R2"],
     featured: true,
     github: { owner: "g0uv4", repo: "psi-dashboard", visibility: "private" },
-    liveUrl: "https://psi-dashboard-47c.pages.dev/",
+    live: { kind: "internal", to: "/psi-demo", label: "互動展示" },
     summary:
       "把 PSI、預測、Rolling、庫存與在途採購單收進同一張物料規劃主表。規劃人員看六個月供需、在途與建議處置，調整會被保存，正式資料以不可變資料包切版。",
     problem: {

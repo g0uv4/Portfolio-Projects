@@ -66,11 +66,3 @@
 - **要合作或要對內容**：每件都有標狀態（正式在用、持續迭代、實驗）。現場原始碼多半不公開，拆解步驟在作品內頁。
 
 ---
-
-## 給要改這個網站的人
-
-```bash
-git clone https://github.com/g0uv4/Portfolio-Projects.git
-npm install
-npm run dev
-```

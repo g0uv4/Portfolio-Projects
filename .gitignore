@@ -1,0 +1,35 @@
+# dependencies
+node_modules
+.node_modules.lock
+
+# env / secrets
+.env
+.env.*
+!.env.example
+
+# build
+dist
+.output
+.vercel
+.nitro
+.tanstack
+.wrangler
+
+# logs / OS
+*.log
+.DS_Store
+
+# sandbox / local-only
+.grok
+.hallmark
+.project_id
+artifacts
+screenshots
+AGENTS.md
+AGENTS.project.md
+startup.sh
+
+# editor
+.idea
+.vscode
+*.swp

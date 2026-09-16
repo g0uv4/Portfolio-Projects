@@ -1,6 +1,6 @@
 # Portfolio Projects
 
-ZOLAND WORKS —的模組化作品集網站。
+ZOLAND WORKS — 力華暐（Zoland Li）的模組化作品集網站。
 
 不是一頁式展示頁。每一件作品是獨立案例，寫清楚原先要解決的問題、作法，以及可以量化的成效。內容以採購／供應鏈現場的 VBA、網頁與桌面工具為主。
 

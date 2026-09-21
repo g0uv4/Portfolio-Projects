@@ -5,7 +5,15 @@ import { Button } from "@/components/ui/button";
 import { profile } from "@/content/profile";
 import { featuredWorks, works, workStats } from "@/content/works";
 
-export const Route = createFileRoute("/")({ component: Home });
+export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "ZOLAND WORKS" },
+      { property: "og:title", content: "ZOLAND WORKS" },
+    ],
+  }),
+  component: Home,
+});
 
 function Home() {
   const featured = featuredWorks().slice(0, 2);

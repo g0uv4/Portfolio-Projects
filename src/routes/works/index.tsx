@@ -26,6 +26,12 @@ export const Route = createFileRoute("/works/")({
     }
     return next;
   },
+  head: () => ({
+    meta: [
+      { title: "作品庫 · ZOLAND WORKS" },
+      { property: "og:title", content: "作品庫 · ZOLAND WORKS" },
+    ],
+  }),
   component: WorksIndex,
 });
 

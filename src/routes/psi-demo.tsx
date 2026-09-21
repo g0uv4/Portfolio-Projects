@@ -3,7 +3,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 export const Route = createFileRoute("/psi-demo")({
   staticData: { chrome: "workbench" as const },
   head: () => ({
-    meta: [{ title: "PSI 儀表板（展示站）" }],
+    meta: [
+      { title: "PSI 儀表板（展示站）" },
+      { property: "og:title", content: "PSI 儀表板（展示站）" },
+    ],
   }),
   component: PsiDemoPage,
 });

@@ -9,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { WorkPreviewDialog } from "@/components/work-preview";
 import { workCoverSrc } from "@/components/work-shot";
 import { CATEGORY_LABEL, STATUS_LABEL, type Work } from "@/content/types";
 
@@ -64,7 +63,6 @@ export function WorkCard({
             看案例
           </Link>
         </Button>
-        {compact ? null : <WorkPreviewDialog work={work} />}
       </CardFooter>
     </Card>
   );

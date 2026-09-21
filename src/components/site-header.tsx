@@ -2,7 +2,6 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { LatticeMark } from "@/components/mark";
-import { profile } from "@/content/profile";
 import { cn } from "@/lib/utils";
 
 const NAV = [
@@ -44,14 +43,6 @@ export function SiteHeader() {
               </Link>
             );
           })}
-          <a
-            href={profile.githubUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex h-11 items-center text-sm text-muted hover:text-fg"
-          >
-            {profile.handle}
-          </a>
         </nav>
 
         <button
@@ -77,15 +68,6 @@ export function SiteHeader() {
                 {item.label}
               </Link>
             ))}
-            <a
-              href={profile.githubUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="flex h-12 items-center text-base text-muted"
-              onClick={() => setOpen(false)}
-            >
-              {profile.handle}
-            </a>
           </nav>
         </div>
       ) : null}

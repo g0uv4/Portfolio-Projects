@@ -528,7 +528,10 @@ export function matchWork(work: Work, query: string): boolean {
 }
 
 export function relatedWorks(work: Work, limit = 3): Work[] {
-  const rest = works.filter((item) => item.slug !== work.slug);
+  if (work.pipeline === "lab") return [];
+  const rest = works.filter(
+    (item) => item.slug !== work.slug && item.pipeline !== "lab",
+  );
   const samePipe = rest.filter((item) => item.pipeline === work.pipeline);
   if (samePipe.length > 0) return samePipe.slice(0, limit);
   return rest

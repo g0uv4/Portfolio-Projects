@@ -103,7 +103,7 @@ function WorkDetail() {
             {work.liveUrl ? (
               <Button asChild>
                 <a href={work.liveUrl} target="_blank" rel="noreferrer">
-                  正式站
+                  {work.liveLabel ?? "網站"}
                   <ArrowUpRight className="size-4" />
                 </a>
               </Button>

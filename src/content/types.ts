@@ -45,6 +45,7 @@ export type Work = {
     visibility: "public" | "private";
   };
   liveUrl?: string;
+  liveLabel?: string;
   summary: string;
   problem: {
     context: string;

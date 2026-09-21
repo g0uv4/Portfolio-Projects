@@ -31,6 +31,8 @@ npm run build
 
 編輯 [`src/content/works.ts`](src/content/works.ts)，在陣列加一個物件。`slug` 會自動變成 `/works/<slug>`，不必改路由。
 
+PSI 去識別化展示站在 [`public/psi-dashboard/`](public/psi-dashboard/)，案例頁「展示站」連到 `/psi-dashboard/index.html`。
+
 個人資料在 [`src/content/profile.ts`](src/content/profile.ts)。
 
 ## 授權

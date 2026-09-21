@@ -16,7 +16,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const featured = featuredWorks().slice(0, 2);
+  const featured = featuredWorks();
   const featuredSlugs = new Set(featured.map((work) => work.slug));
   const rest = works.filter((work) => !featuredSlugs.has(work.slug));
 
@@ -27,8 +27,11 @@ function Home() {
           <h1 className="text-4xl font-semibold tracking-tight text-fg sm:text-5xl">
             把現場流程做成可交接的系統。
           </h1>
-          <p className="mt-5 max-w-xl text-base leading-relaxed text-muted">
-            {profile.latin}。{profile.tagline}
+          <p className="mt-5 text-sm text-muted">
+            {profile.latin} · {profile.handle} · {profile.location}
+          </p>
+          <p className="mt-3 max-w-xl text-base leading-relaxed text-muted">
+            {profile.tagline}
           </p>
           <div className="mt-8">
             <Button asChild>
@@ -55,7 +58,7 @@ function Home() {
             <ArrowRight className="size-4" />
           </Link>
         </div>
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-3">
           {featured.map((work) => (
             <WorkCard key={work.slug} work={work} />
           ))}

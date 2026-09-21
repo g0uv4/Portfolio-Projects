@@ -55,7 +55,7 @@ export const works: Work[] = [
     status: "production",
     year: "2026",
     stack: ["HTML", "Cloudflare Pages", "R2"],
-    featured: true,
+    featured: false,
     github: { owner: "g0uv4", repo: "vsr-dashboard", visibility: "private" },
     summary:
       "靜態站部署在 Cloudflare Pages。匯入規劃主檔與通路對照後，自動產生簽核意見，並把未交採購／銷售、新單與 Rolling、產品線張數拆成可讀的圖。",
@@ -95,7 +95,7 @@ export const works: Work[] = [
     status: "production",
     year: "2026",
     stack: ["VBA", "VBScript", "Python", "pandas"],
-    featured: true,
+    featured: false,
     github: {
       owner: "g0uv4",
       repo: "Compare_POBacklog_ETD",
@@ -139,7 +139,7 @@ export const works: Work[] = [
     status: "production",
     year: "2026",
     stack: ["Outlook VBA", "Excel"],
-    featured: true,
+    featured: false,
     github: {
       owner: "g0uv4",
       repo: "Download_attacg_from_outlook",
@@ -414,7 +414,7 @@ export const works: Work[] = [
     status: "production",
     year: "2026",
     stack: ["Python", "Pillow", "Grok skill"],
-    featured: false,
+    featured: true,
     github: { owner: "g0uv4", repo: "coloring-book", visibility: "public" },
     summary:
       "可安裝的 Grok skill。上傳照片後先出保留／省略清單，再譯成 Open-Line 線稿。你確認之後才合成 A4 PDF。不是網站，也不把多張照片合成一本書。",
@@ -501,7 +501,10 @@ export function getWork(slug: string): Work | undefined {
 }
 
 export function featuredWorks(): Work[] {
-  return works.filter((work) => work.featured);
+  const order = ["psi-dashboard", "coloring-book", "po-qty-updater"];
+  return order
+    .map((slug) => getWork(slug))
+    .filter((work): work is Work => Boolean(work));
 }
 
 export function worksByCategory(category?: WorkCategory | "all"): Work[] {

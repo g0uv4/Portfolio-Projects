@@ -4,12 +4,6 @@ import { MetricTable } from "@/components/metric-table";
 import { ProcessSteps } from "@/components/process-steps";
 import { WorkCard } from "@/components/work-card";
 import { WorkShot } from "@/components/work-shot";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import {
   Breadcrumb,
@@ -120,40 +114,32 @@ function WorkDetail() {
         </div>
       </section>
 
-      <Accordion type="multiple" defaultValue={["meta"]} className="mt-10 max-w-3xl">
-        <AccordionItem value="method">
-          <AccordionTrigger>作法步驟</AccordionTrigger>
-          <AccordionContent>
-            <div id="method" className="scroll-mt-32">
-              <ProcessSteps steps={work.approach.steps} />
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="meta">
-          <AccordionTrigger>技術與倉庫</AccordionTrigger>
-          <AccordionContent>
-            <dl>
-              <Side dt="技術棧" dd={work.stack.join(" · ")} />
-              {publicGithubHref(work) && work.github ? (
-                <Side
-                  dt="倉庫"
-                  dd={`${work.github.owner}/${work.github.repo}`}
-                />
-              ) : null}
-              <Side dt="產線" dd={PIPELINE_LABEL[work.pipeline]} />
-              <Side dt="年份" dd={work.year} />
-              <Side dt="狀態" dd={STATUS_LABEL[work.status]} />
-            </dl>
-            <ul className="mt-4 flex flex-wrap gap-2">
-              {work.highlights.map((item) => (
-                <li key={item}>
-                  <Badge tone="muted">{item}</Badge>
-                </li>
-              ))}
-            </ul>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
+      <section id="method" className="mt-10 max-w-3xl scroll-mt-32">
+        <h2 className="text-xl font-semibold">作法步驟</h2>
+        <div className="mt-4">
+          <ProcessSteps steps={work.approach.steps} />
+        </div>
+      </section>
+
+      <section id="meta" className="mt-10 max-w-3xl scroll-mt-32">
+        <h2 className="text-xl font-semibold">技術與倉庫</h2>
+        <dl className="mt-4">
+          <Side dt="技術棧" dd={work.stack.join(" · ")} />
+          {publicGithubHref(work) && work.github ? (
+            <Side dt="倉庫" dd={`${work.github.owner}/${work.github.repo}`} />
+          ) : null}
+          <Side dt="產線" dd={PIPELINE_LABEL[work.pipeline]} />
+          <Side dt="年份" dd={work.year} />
+          <Side dt="狀態" dd={STATUS_LABEL[work.status]} />
+        </dl>
+        <ul className="mt-4 flex flex-wrap gap-2">
+          {work.highlights.map((item) => (
+            <li key={item}>
+              <Badge tone="muted">{item}</Badge>
+            </li>
+          ))}
+        </ul>
+      </section>
 
       {related.length > 0 ? (
         <section className="no-print mt-16">

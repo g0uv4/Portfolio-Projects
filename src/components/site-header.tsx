@@ -17,7 +17,7 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-20 border-b border-border bg-bg">
+    <header className="sticky top-0 z-20 border-b border-border bg-bg print:hidden">
       <div className="wrap flex h-16 items-center justify-between gap-4">
         <Link
           to="/"

@@ -3,7 +3,7 @@ import { profile } from "@/content/profile";
 
 export function SiteFooter() {
   return (
-    <footer className="mt-auto border-t border-border">
+    <footer className="mt-auto border-t border-border print:hidden">
       <div className="wrap flex flex-col gap-2 py-6 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
         <p>
           {profile.latin} · {profile.location}

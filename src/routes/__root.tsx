@@ -1,8 +1,9 @@
-import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
+import { createRootRoute, HeadContent, Outlet, Scripts, useRouterState } from "@tanstack/react-router";
 import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import appCss from "../styles.css?url";
 
 const APP_NAME = "ZOLAND WORKS";
@@ -16,7 +17,7 @@ export const Route = createRootRoute({
       {
         name: "description",
         content:
-          "力華暐的作品庫。把現場流程做成可交接的系統：問題、作法、量化成效。",
+          "Zoland Li 的作品庫。把現場流程做成可交接的系統：問題、作法、量化成效。",
       },
       { name: "theme-color", content: "#F4F7FB" },
     ],
@@ -41,6 +42,14 @@ export const Route = createRootRoute({
 });
 
 function RootDocument() {
+  const chrome = useRouterState({
+    select: (state) =>
+      state.matches.some((match) => match.staticData.chrome === "workbench")
+        ? "workbench"
+        : "site",
+  });
+  const showSiteChrome = chrome === "site";
+
   return (
     <html lang="zh-Hant" className="overflow-x-clip" suppressHydrationWarning>
       <head>
@@ -49,13 +58,15 @@ function RootDocument() {
       <body className="min-h-dvh bg-bg font-sans text-fg antialiased">
         <PreviewHostBridge />
         <AuthProvider>
-          <div className="flex min-h-dvh flex-col">
-            <SiteHeader />
-            <div className="flex-1">
-              <Outlet />
+          <TooltipProvider>
+            <div className="flex min-h-dvh flex-col">
+              {showSiteChrome ? <SiteHeader /> : null}
+              <div className="flex-1">
+                <Outlet />
+              </div>
+              {showSiteChrome ? <SiteFooter /> : null}
             </div>
-            <SiteFooter />
-          </div>
+          </TooltipProvider>
         </AuthProvider>
         <Scripts />
       </body>

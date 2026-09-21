@@ -10,13 +10,13 @@ export const works: Work[] = [
     title: "PSI Dashboard",
     subtitle: "物料規劃工作台",
     category: "web",
+    pipeline: "planning",
     status: "production",
     year: "2026",
     stack: ["JavaScript", "Cloudflare Pages", "D1", "R2"],
     featured: true,
     github: { owner: "g0uv4", repo: "psi-dashboard", visibility: "private" },
-    liveUrl: "/psi-dashboard/index.html",
-    liveLabel: "展示站",
+    live: { kind: "internal", to: "/psi-demo", label: "展示站" },
     summary:
       "把 PSI、預測、Rolling、庫存與在途採購單收進同一張物料規劃主表。規劃人員看六個月供需、在途與建議處置，調整會被保存，正式資料以不可變資料包切版。作品集附去識別化靜態展示站（約 30% 抽樣），不含正式資料與後端。",
     problem: {
@@ -36,12 +36,12 @@ export const works: Work[] = [
     },
     results: {
       narrative:
-        "規劃從「對完檔再貼表」改成「在同一張主表上看建議、存調整、可回滾」。正式切版與預覽隔離，避免把未審核資料寫進生產。",
+        "規劃改在同一張主表上看六個月供需、在途與建議處置。現行比對固定四類來源；預測依五條產品線分庫，互不覆寫。候選包與正式包分開切版，未審核資料不會進生產。",
       metrics: [
-        { label: "規劃視窗", value: "6 個月", note: "正式資料包固定月份" },
-        { label: "預測分庫", value: "依產品線", note: "各線獨立，互不覆寫" },
-        { label: "來源對齊", value: "4 類", note: "主檔 · 預測 · Rolling · 在途" },
-        { label: "切版", value: "不可變包", note: "候選與正式分離" },
+        { label: "規劃視窗", value: "6 個月", note: "正式資料包固定，日曆跨月不重排" },
+        { label: "現行來源", value: "4 類", note: "PSI · FCST · Rolling · 在途 PO；SO 只留歷史相容" },
+        { label: "預測分庫", value: "5 套", note: "各產品線獨立，畫面不列代碼" },
+        { label: "切版層級", value: "2 層", note: "候選資料包與正式包分離" },
       ],
     },
     highlights: ["供需主表", "建議處置", "正式切版", "欄位公式"],
@@ -51,6 +51,7 @@ export const works: Work[] = [
     title: "VSR Dashboard",
     subtitle: "簽核意見與供需圖表",
     category: "web",
+    pipeline: "planning",
     status: "production",
     year: "2026",
     stack: ["HTML", "Cloudflare Pages", "R2"],
@@ -69,18 +70,18 @@ export const works: Work[] = [
       steps: [
         "必要工作表：銷售、採購、庫存、Rolling；對照欄位固定為鍵值、通路名稱、編號與價格表。",
         "對應規則：銷售與 Rolling 走編號，採購走通路簡稱，必要時用價格表做料號層回退。",
-        "圖表分流：採購／銷售比較、新單與 Rolling（當月起三個月）、產品線張數。",
-        "本機排程每日上傳最新檔，保留資料歷史 10 版、對照 5 版。",
+        "圖表分流：採購／銷售比較、新單與 Rolling（M～M+3）、產品線張數。",
+        "本機排程每日 11:30 上傳最新檔，保留資料歷史 10 版、對照 5 版。",
       ],
     },
     results: {
       narrative:
-        "簽核意見與圖表跟著同一份最新檔走。開頁即載、輸入即更新，減少「檔案是新的、意見還是舊的」這種落差。",
+        "簽核意見隨輸入重算，不再按計算鈕。開頁載最新檔；資料歷史保留 10 版、對照 5 版。Rolling 固定畫 M～M+3，與新單分開，避免檔新、意見舊。",
       metrics: [
-        { label: "意見產生", value: "即時", note: "輸入變更自動重算" },
-        { label: "資料歷史", value: "10 版", note: "物件儲存保留" },
-        { label: "Rolling", value: "當月起 3 個月", note: "與新單分開繪製" },
-        { label: "日更", value: "排程", note: "本機上傳至部署 API" },
+        { label: "必要工作表", value: "4 張", note: "SO · PO · 庫存 · Rolling" },
+        { label: "Rolling 視窗", value: "4 個月", note: "M · M+1 · M+2 · M+3，與新單分圖" },
+        { label: "資料歷史", value: "10 版", note: "對照另留 5 版" },
+        { label: "日更時刻", value: "11:30", note: "本機排程上傳；計算鈕已拿掉" },
       ],
     },
     highlights: ["簽核意見", "通路對照", "物件儲存", "產品線張數"],
@@ -90,6 +91,7 @@ export const works: Work[] = [
     title: "Backlog 交期比對",
     subtitle: "原廠 Open Order 交期",
     category: "vba",
+    pipeline: "etd",
     status: "production",
     year: "2026",
     stack: ["VBA", "VBScript", "Python", "pandas"],
@@ -118,12 +120,12 @@ export const works: Work[] = [
     },
     results: {
       narrative:
-        "交期核對從「對完鍵再著色」變成選兩份檔、等報表。這類自動化報表，讓交期不穩定能提早被看見，現場例外可以提前處理。",
+        "人工對三千列以上 backlog 常耗一個上午；現在選兩份檔，用三欄對鍵標提前、延後與新單，並算出天數差。這類自動化交期報表，讓交期不穩定能提早被看見。現場口徑：交期不穩定約下降 60%（與關於頁相同，含 EOL 料轉用，不是本腳本的單獨實驗）。",
       metrics: [
-        { label: "迭代", value: "V6.09", note: "九個正式版" },
-        { label: "對鍵", value: "3 欄", note: "單號 · 項次 · 料號" },
-        { label: "圖表", value: "4 張", note: "通路 / 金額 / 天數 / 週別" },
-        { label: "選檔", value: "無順序", note: "檔名日期自動判新舊" },
+        { label: "對鍵", value: "3 欄", note: "採購單號 · 項次 · 料號" },
+        { label: "人工基準", value: "≥3,000 列", note: "核對常耗一個上午" },
+        { label: "輸出圖", value: "4 張", note: "通路筆數 · 金額 · 天數 · 週別" },
+        { label: "腳本版", value: "V6.09", note: "VBS 九個正式版；Python 同對鍵" },
       ],
     },
     highlights: ["交期天數", "提前 / 延後", "自動存檔", "雙實作"],
@@ -133,6 +135,7 @@ export const works: Work[] = [
     title: "Outlook 附件收取",
     subtitle: "Backlog 與出貨通知",
     category: "automation",
+    pipeline: "etd",
     status: "production",
     year: "2026",
     stack: ["Outlook VBA", "Excel"],
@@ -160,12 +163,12 @@ export const works: Work[] = [
     },
     results: {
       narrative:
-        "報表落地不再依賴「有沒有人剛好開著郵件客戶端」。漏檔與覆蓋原檔這兩類操作失誤，從流程裡拿掉。",
+        "每次開啟補掃三個指定夾過去五天的信，之後即時監看。只收下試算表，同檔名不覆蓋，讓交期比對與日期碼檢查不必再找檔。",
       metrics: [
         { label: "回溯", value: "5 天", note: "每次啟動補掃" },
-        { label: "監看夾", value: "3 個", note: "Backlog + 兩條出貨通知" },
-        { label: "格式", value: "試算表", note: "其餘附件丟棄" },
-        { label: "去重", value: "檔名", note: "不覆蓋已存在檔" },
+        { label: "監看夾", value: "3 個", note: "原廠 backlog · 兩條產線出貨" },
+        { label: "收檔", value: "試算表", note: "其餘附件不落地" },
+        { label: "同名檔", value: "不覆蓋", note: "已存在就跳過" },
       ],
     },
     highlights: ["啟動補掃", "即時監看", "只收報表", "防覆蓋"],
@@ -175,6 +178,7 @@ export const works: Work[] = [
     title: "採購單數量調整",
     subtitle: "出貨清單回寫數量與金額",
     category: "desktop",
+    pipeline: "ops",
     status: "production",
     year: "2026",
     stack: ["Python", "openpyxl", "Windows"],
@@ -203,12 +207,12 @@ export const works: Work[] = [
     },
     results: {
       narrative:
-        "大量改數量從「逐列手改」變成選兩個檔。原單保留，錯列可從紀錄回追，適合不能把採購單送出公司網的環境。",
+        "選採購單與出貨清單兩個檔，三欄完全相符才改數量。未稅金額依出貨數量 × 單價重算，合計只套用已改列差額。原單另存、程式不含網路請求。",
       metrics: [
-        { label: "對鍵", value: "3 欄", note: "單號 · 項次 · 料號" },
-        { label: "原檔", value: "不覆寫", note: "結果另存" },
-        { label: "網路", value: "無", note: "完全離線" },
-        { label: "發布", value: "執行檔", note: "一般使用者免裝環境" },
+        { label: "對鍵", value: "3 欄", note: "採購單號 · 項次 · 料號須全同" },
+        { label: "輸入檔", value: "2 份", note: "HTML 採購單 + 出貨清單" },
+        { label: "執行檔", value: "1 份", note: "使用端免裝環境" },
+        { label: "原檔", value: "另存", note: "結果與紀錄都不覆寫原單" },
       ],
     },
     highlights: ["離線處理", "差額合計", "詳細紀錄", "Windows 包裝"],
@@ -218,6 +222,7 @@ export const works: Work[] = [
     title: "Excel 解法室",
     subtitle: "用訪談整理 VBA 需求",
     category: "web",
+    pipeline: "lab",
     status: "lab",
     year: "2026",
     stack: ["TypeScript", "vinext", "D1"],
@@ -240,11 +245,12 @@ export const works: Work[] = [
     },
     results: {
       narrative:
-        "需求被寫成可重讀的案例，而不是散落在對話裡。之後加新解法只是加一頁，不必改整站。",
+        "每個案例先寫資料從哪來、誰會按、失敗時要怎樣，再對到公式或 VBA。訪談頁與解法頁分開；加一題就是加一頁，不必改整站。還沒有已上線的案件數可報。",
       metrics: [
-        { label: "入口", value: "訪談", note: "先問題後程式" },
-        { label: "儲存", value: "可掛庫", note: "案例可累積" },
-        { label: "擴充", value: "分頁", note: "一題一解法" },
+        { label: "頁型", value: "2 種", note: "需求訪談與解法室分開" },
+        { label: "提問結構", value: "3 項", note: "來源 · 操作者 · 失敗時怎麼辦" },
+        { label: "擴充單位", value: "1 頁 / 題", note: "新解法不改整站" },
+        { label: "上線案件", value: "未計量", note: "實驗站，不編成件數成效" },
       ],
     },
     highlights: ["需求訪談", "解法庫", "可擴充頁"],
@@ -254,6 +260,7 @@ export const works: Work[] = [
     title: "Date Code 檢查",
     subtitle: "出貨通知超過一年警示",
     category: "vba",
+    pipeline: "etd",
     status: "production",
     year: "2026",
     stack: ["VBScript", "Excel"],
@@ -276,19 +283,22 @@ export const works: Work[] = [
     },
     results: {
       narrative:
-        "過舊批從「出貨後才發現」前移到「通知一進來就標紅」。屬於例外提前處理的一環。",
+        "出貨通知一進來就用日期碼對「今天往前一年」這道門檻。超齡批單獨列出，讓過舊庫存在出貨前被看見，而不是收貨端才爆。",
       metrics: [
-        { label: "門檻", value: "1 年", note: "日期碼超齡" },
-        { label: "輸入", value: "出貨通知", note: "與自動收取銜接" },
+        { label: "門檻", value: "1 年", note: "日期碼對應日早於今天往前一年" },
+        { label: "輸入", value: "出貨通知", note: "與信件落地檔銜接" },
+        { label: "年碼", value: "1 字母+週", note: "如 P01＝該年第 1 週" },
+        { label: "輸出", value: "1 份清單", note: "只列超齡批，供換批或通知窗口" },
       ],
     },
     highlights: ["超齡批", "出貨前攔截"],
   },
   {
     slug: "combin-backlog",
-    title: "Backlog 合併",
+    title: "PO Backlog合併",
     subtitle: "多份 Open Order 合成一表",
     category: "vba",
+    pipeline: "etd",
     status: "production",
     year: "2026",
     stack: ["VBScript", "Excel"],
@@ -311,10 +321,12 @@ export const works: Work[] = [
     },
     results: {
       narrative:
-        "比對工具不再承擔「檔案長什麼樣」的不確定性。前置合併失敗會停在這一步，而不是在天數圖上出現鬼列。",
+        "選一個資料夾，依檔名月份各留 1 份最新原廠 Backlog，表頭只抄一次，輸出單一工作表「合併報表_Summary」。合併與交期比對分倉，欄位契約固定後再往下丟。",
       metrics: [
-        { label: "職責", value: "單一", note: "只合併、不比對" },
-        { label: "下游", value: "交期比對", note: "輸入契約固定" },
+        { label: "輸出表", value: "1 張", note: "工作表名合併報表_Summary" },
+        { label: "每月取檔", value: "1 份最新", note: "檔名 YYYYMM 去重" },
+        { label: "表頭", value: "抄 1 次", note: "後續檔從第 2 列接上" },
+        { label: "下游", value: "1 個契約", note: "交給交期比對工具" },
       ],
     },
     highlights: ["多檔合成", "欄位契約"],
@@ -324,6 +336,7 @@ export const works: Work[] = [
     title: "Oracle SQL 對帳",
     subtitle: "採購與庫存查詢集",
     category: "data",
+    pipeline: "ops",
     status: "production",
     year: "2026",
     stack: ["PL/SQL", "Oracle"],
@@ -345,10 +358,12 @@ export const works: Work[] = [
     },
     results: {
       narrative:
-        "對帳語句可以比對差異、可以回滾。系統數字與報表數字的爭議，至少有一份共同的查詢起點。",
+        "質押、未交、庫存與價格四類對帳收成可重跑腳本。帳號與連線字串不進倉。同一邏輯不再並行三份，報表跟系統對不上時先對這份共同查詢。",
       metrics: [
-        { label: "來源", value: "資料庫", note: "與現場系統對帳" },
-        { label: "形式", value: "腳本庫", note: "可版本控制" },
+        { label: "查詢主題", value: "4 類", note: "質押 · 未交 · 庫存 · 價格" },
+        { label: "並行版本", value: "1 份", note: "同一邏輯收斂，不再並行" },
+        { label: "痛點基準", value: "3 份", note: "改版前同一邏輯常被改出三個版本" },
+        { label: "連線字串", value: "不進倉", note: "不寫帳號或正式連線" },
       ],
     },
     highlights: ["對帳查詢", "版本化 SQL"],
@@ -358,6 +373,7 @@ export const works: Work[] = [
     title: "現場 VBA 工具箱",
     subtitle: "對帳、調貨、補單、對照表",
     category: "vba",
+    pipeline: "ops",
     status: "active",
     year: "2026",
     stack: ["VBA", "Excel"],
@@ -380,10 +396,11 @@ export const works: Work[] = [
     },
     results: {
       narrative:
-        "現場腳本有了暫存與分級：能獨立說明的進正式案例，其餘留在工具箱。這就是模組化維護的起點。",
+        "對帳單、調貨信、補單、通路對照分四箱收。原始碼另存、巨集檔只當載體。能獨立說明的才拆成作品頁，其餘留在這一個工具箱，不把未完成項算成已上線。",
       metrics: [
-        { label: "分箱", value: "多任務", note: "對帳 / 調貨 / 補單 / 對照" },
-        { label: "下一步", value: "拆倉", note: "穩定後獨立成作品頁" },
+        { label: "任務分箱", value: "4 類", note: "對帳 · 調貨 · 補單 · 對照" },
+        { label: "工具箱", value: "1 倉", note: "未拆倉者不假裝已上線" },
+        { label: "原始碼", value: "與巨集分存", note: "巨集檔只當載體，不當唯一真相" },
       ],
     },
     highlights: ["現場腳本", "可拆倉", "原始碼另存"],
@@ -408,14 +425,27 @@ export function worksByCategory(category?: WorkCategory | "all"): Work[] {
   return works.filter((work) => work.category === category);
 }
 
+export function matchWork(work: Work, query: string): boolean {
+  const q = query.trim().toLowerCase();
+  if (!q) return true;
+  const hay = [
+    work.title,
+    work.subtitle,
+    work.summary,
+    work.stack.join(" "),
+    work.highlights.join(" "),
+  ]
+    .join(" ")
+    .toLowerCase();
+  return hay.includes(q);
+}
+
 export function relatedWorks(work: Work, limit = 3): Work[] {
-  return works
-    .filter((item) => item.slug !== work.slug)
-    .sort((a, b) => {
-      const aSame = a.category === work.category ? 1 : 0;
-      const bSame = b.category === work.category ? 1 : 0;
-      return bSame - aSame;
-    })
+  const rest = works.filter((item) => item.slug !== work.slug);
+  const samePipe = rest.filter((item) => item.pipeline === work.pipeline);
+  if (samePipe.length > 0) return samePipe.slice(0, limit);
+  return rest
+    .filter((item) => item.category === work.category)
     .slice(0, limit);
 }
 

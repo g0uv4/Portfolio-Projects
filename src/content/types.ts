@@ -16,6 +16,10 @@ export const CATEGORY_LABEL: Record<WorkCategory, string> = {
   data: "資料",
 };
 
+export type WorkLiveLink =
+  | { kind: "internal"; to: "/psi-demo"; label: string }
+  | { kind: "external"; href: string; label?: string };
+
 export type WorkStatus = "production" | "active" | "lab";
 
 export const STATUS_LABEL: Record<WorkStatus, string> = {
@@ -30,11 +34,23 @@ export type WorkMetric = {
   note?: string;
 };
 
+export const WORK_PIPELINES = ["planning", "etd", "ops", "lab"] as const;
+
+export type WorkPipeline = (typeof WORK_PIPELINES)[number];
+
+export const PIPELINE_LABEL: Record<WorkPipeline, string> = {
+  planning: "規劃與簽核",
+  etd: "交期與出貨",
+  ops: "採購作業",
+  lab: "方法實驗",
+};
+
 export type Work = {
   slug: string;
   title: string;
   subtitle: string;
   category: WorkCategory;
+  pipeline: WorkPipeline;
   status: WorkStatus;
   year: string;
   stack: string[];
@@ -44,8 +60,7 @@ export type Work = {
     repo: string;
     visibility: "public" | "private";
   };
-  liveUrl?: string;
-  liveLabel?: string;
+  live?: WorkLiveLink;
   summary: string;
   problem: {
     context: string;

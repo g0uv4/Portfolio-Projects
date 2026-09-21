@@ -124,3 +124,34 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+@media print {
+  html,
+  body {
+    background: #fff;
+    color: #111;
+    overflow: visible;
+  }
+
+  .no-print,
+  [data-slot="dialog-overlay"],
+  [data-slot="dialog-content"] {
+    display: none !important;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .wrap {
+    max-width: none;
+    padding-inline: 0;
+  }
+
+  .card-hover,
+  [data-slot="card"] {
+    box-shadow: none;
+    border: 1px solid #d5dee9;
+  }
+}

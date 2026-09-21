@@ -1,5 +1,4 @@
 export const profile = {
-  name: "力華暐",
   latin: "Zoland Li",
   handle: "g0uv4",
   role: "軟體工程師 · 供應鏈系統",

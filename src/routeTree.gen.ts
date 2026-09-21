@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as GithubRouteImport } from './routes/github'
+import { Route as PsiDemoRouteImport } from './routes/psi-demo'
 import { Route as WorksIndexRouteImport } from './routes/works/index'
 import { Route as WorksSlugRouteImport } from './routes/works/$slug'
 
@@ -30,6 +31,11 @@ const GithubRoute = GithubRouteImport.update({
   path: '/github',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PsiDemoRoute = PsiDemoRouteImport.update({
+  id: '/psi-demo',
+  path: '/psi-demo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WorksIndexRoute = WorksIndexRouteImport.update({
   id: '/works/',
   path: '/works/',
@@ -45,6 +51,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/github': typeof GithubRoute
+  '/psi-demo': typeof PsiDemoRoute
   '/works/$slug': typeof WorksSlugRoute
   '/works/': typeof WorksIndexRoute
 }
@@ -52,6 +59,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/github': typeof GithubRoute
+  '/psi-demo': typeof PsiDemoRoute
   '/works/$slug': typeof WorksSlugRoute
   '/works': typeof WorksIndexRoute
 }
@@ -60,21 +68,31 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/github': typeof GithubRoute
+  '/psi-demo': typeof PsiDemoRoute
   '/works/$slug': typeof WorksSlugRoute
   '/works/': typeof WorksIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/github' | '/works/$slug' | '/works/'
+  fullPaths:
+    '/' | '/about' | '/github' | '/psi-demo' | '/works/$slug' | '/works/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/github' | '/works/$slug' | '/works'
-  id: '__root__' | '/' | '/about' | '/github' | '/works/$slug' | '/works/'
+  to: '/' | '/about' | '/github' | '/psi-demo' | '/works/$slug' | '/works'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/github'
+    | '/psi-demo'
+    | '/works/$slug'
+    | '/works/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   GithubRoute: typeof GithubRoute
+  PsiDemoRoute: typeof PsiDemoRoute
   WorksSlugRoute: typeof WorksSlugRoute
   WorksIndexRoute: typeof WorksIndexRoute
 }
@@ -102,6 +120,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GithubRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/psi-demo': {
+      id: '/psi-demo'
+      path: '/psi-demo'
+      fullPath: '/psi-demo'
+      preLoaderRoute: typeof PsiDemoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/works/': {
       id: '/works/'
       path: '/works'
@@ -123,6 +148,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   GithubRoute: GithubRoute,
+  PsiDemoRoute: PsiDemoRoute,
   WorksSlugRoute: WorksSlugRoute,
   WorksIndexRoute: WorksIndexRoute,
 }

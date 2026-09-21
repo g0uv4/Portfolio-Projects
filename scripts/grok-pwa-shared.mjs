@@ -91,6 +91,15 @@ function isVercelSystemHost(host) {
   );
 }
 
+export function isGrokPreviewHost(hostHeader) {
+  const host = String(hostHeader ?? "")
+    .split(",")[0]
+    .trim()
+    .split(":")[0]
+    .toLowerCase();
+  return host === "grok.me" || host.endsWith(".grok.me") || host.endsWith(".grok-sandbox.com");
+}
+
 /** Hostname suitable for absolute og:image URLs. Preview guests (X-Forwarded-Host) are allowed. */
 export function publicAppHost(hostHeader) {
   const host = String(hostHeader ?? "")
@@ -433,26 +442,30 @@ export function injectGrokPwaHead(html, ctx = {}) {
     documentTitle,
   );
   let next = stripShareMetaTags(html);
+  const grokPreview = isGrokPreviewHost(host);
 
-  const missing = grokPwaHeadTags(appName)
-    .filter(([key]) => {
-      if (key === "manifest") return !next.includes('href="/__grok/manifest.webmanifest"');
-      if (key === "apple-touch-icon") return !next.includes('href="/__grok/icon-180.png"');
-      return !next.includes(`name="${key}"`);
-    })
-    .map(([, tag]) => tag);
+  const missing = grokPreview
+    ? grokPwaHeadTags(appName)
+        .filter(([key]) => {
+          if (key === "manifest") return !next.includes('href="/__grok/manifest.webmanifest"');
+          if (key === "apple-touch-icon") return !next.includes('href="/__grok/icon-180.png"');
+          return !next.includes(`name="${key}"`);
+        })
+        .map(([, tag]) => tag)
+    : [];
 
   next = insertAfterHeadOpen(
     next,
     grokOgHeadTags({ host, appName, site, documentTitle, cwd }).join(""),
   );
 
-  if (!next.includes("/grok-app-builder/extensions.js")) {
+  if (grokPreview && !next.includes("/grok-app-builder/extensions.js")) {
     missing.push(...grokExtensionsHeadTags(projectId));
-  } else if (projectId && !next.includes('name="grok-project-id"')) {
+  } else if (grokPreview && projectId && !next.includes('name="grok-project-id"')) {
     missing.push(`<meta name="grok-project-id" content="${escapeHtml(projectId)}">`);
   }
   if (
+    grokPreview &&
     projectId &&
     !next.includes('property="grok:app_id"') &&
     !next.includes("property='grok:app_id'")

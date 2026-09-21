@@ -405,6 +405,90 @@ export const works: Work[] = [
     },
     highlights: ["現場腳本", "可拆倉", "原始碼另存"],
   },
+  {
+    slug: "coloring-book",
+    title: "著色本",
+    subtitle: "照片譯成線稿，確認後才出 A4 PDF",
+    category: "automation",
+    pipeline: "lab",
+    status: "production",
+    year: "2026",
+    stack: ["Python", "Pillow", "Grok skill"],
+    featured: false,
+    github: { owner: "g0uv4", repo: "coloring-book", visibility: "public" },
+    summary:
+      "可安裝的 Grok skill。上傳照片後先出保留／省略清單，再譯成 Open-Line 線稿。你確認之後才合成 A4 PDF。不是網站，也不把多張照片合成一本書。",
+    problem: {
+      context:
+        "要把寵物或人像做成可印的著色頁時，模型常把內部塗黑，或沒問就出 PDF。",
+      pain: "線稿不可著色，或印出來才發現該留的元件被省略。",
+    },
+    approach: {
+      overview:
+        "流程停兩次。先確認保留／省略，再確認線稿。只有你說輸出 PDF 才組 A4。",
+      steps: [
+        "強度分簡單、中等、高階。預設中等。高階線寬與中等相同，只多內部元件。",
+        "只改某一塊時只重畫該元件，其餘不動。",
+        "機器品管查線條連續、區塊閉合、平滑無鋸齒。",
+        "MIT 授權。Grok、Codex、Claude Code 都可 clone 同一份 skill。",
+      ],
+    },
+    results: {
+      narrative:
+        "skill 包公開在 GitHub。對話裡上傳照片即可跑。PDF 不會在確認前產出。沒有下載次數可報。",
+      metrics: [
+        { label: "強度", value: "3 檔", note: "簡單 · 中等（預設）· 高階" },
+        { label: "停點", value: "2 次", note: "清單確認與線稿確認" },
+        { label: "紙張", value: "A4", note: "可 1／2／4 格或直式" },
+        { label: "授權", value: "MIT", note: "公開倉 g0uv4/coloring-book" },
+      ],
+    },
+    highlights: ["線稿", "先確認再 PDF", "只改某一塊"],
+  },
+  {
+    slug: "what-is-the-data-saying",
+    title: "資料在說什麼",
+    subtitle: "依資料形狀推薦圖種並協助產出",
+    category: "data",
+    pipeline: "lab",
+    status: "lab",
+    year: "2026",
+    stack: ["Grok skill", "Markdown"],
+    featured: false,
+    github: {
+      owner: "g0uv4",
+      repo: "what-is-the-data-saying",
+      visibility: "private",
+    },
+    summary:
+      "Grok Build skill。貼上報表或表格後，先檢查資料形狀，再給一個主選圖種與備選，並依納茲教圖口吻口述怎麼畫。維護可成長的 pattern 庫。",
+    problem: {
+      context:
+        "台灣繁體中文報表常被畫成圓餅或雙 Y 軸。圖種選錯，數字對了也讀不出結論。",
+      pain: "沒有一份對照表把任務（比較、趨勢、分布、流向）接到中文圖種名與產出步驟。",
+    },
+    approach: {
+      overview:
+        "固定三步：診斷形狀、推薦圖型、協助產出。啟發式與範例分檔，改錯只動單一 references 檔。",
+      steps: [
+        "回覆格式固定為推薦、備選、避免、讀者／輸出、pattern 檔名。",
+        "先寫故事句再動手。標單位、時間範圍與資料來源。未核的數字標未核。",
+        "成功案例寫進 examples/<slug>.md，並補 ATTRIBUTION。",
+        "面向繁中報表讀者。程式與變數名可用英文。",
+      ],
+    },
+    results: {
+      narrative:
+        "目前版本 0.2.0。內建 39 個具名 pattern。倉是私人的，作品集不放 GitHub 按鈕。還沒有公開使用次數可報。",
+      metrics: [
+        { label: "版本", value: "0.2.0", note: "納茲教圖實戰版" },
+        { label: "流程", value: "3 步", note: "形狀 · 推薦 · 產出" },
+        { label: "pattern", value: "39", note: "examples/ 具名檔，含來源檔名" },
+        { label: "授權", value: "MIT", note: "倉為私人，不公開原始碼連結" },
+      ],
+    },
+    highlights: ["圖種推薦", "繁中報表", "可成長範例庫"],
+  },
 ];
 
 export function workCode(work: Work): string {

@@ -1,7 +1,55 @@
 import type { Work } from "@/content/types";
 
+const COVERED = new Set([
+  "psi-dashboard",
+  "vsr-dashboard",
+  "backlog-etd",
+  "outlook-inbox",
+  "po-qty-updater",
+  "vba-studio",
+  "datecode",
+  "combin-backlog",
+  "oracle-sql",
+  "side-vba",
+]);
+
 export function workCoverSrc(slug: string) {
   return `/works/${slug}.jpg`;
+}
+
+export function hasWorkCover(slug: string) {
+  return COVERED.has(slug);
+}
+
+export function WorkCover({
+  work,
+  compact = false,
+}: {
+  work: Work;
+  compact?: boolean;
+}) {
+  if (!hasWorkCover(work.slug)) {
+    return (
+      <div
+        className={
+          compact
+            ? "flex aspect-[16/7] items-end bg-surface-2 px-4 py-3"
+            : "flex aspect-video items-end bg-surface-2 px-5 py-4"
+        }
+      >
+        <p className="text-sm font-semibold tracking-tight text-fg">{work.title}</p>
+      </div>
+    );
+  }
+  return (
+    <img
+      src={workCoverSrc(work.slug)}
+      alt=""
+      width={1200}
+      height={676}
+      className={compact ? "aspect-[16/7] w-full object-cover" : "aspect-video w-full object-cover"}
+    />
+  );
 }
 
 export function WorkShot({ work }: { work: Work }) {
@@ -25,15 +73,11 @@ export function WorkShot({ work }: { work: Work }) {
 
   return (
     <figure className="overflow-hidden rounded-lg bg-surface shadow-[var(--shadow-border)]">
-      <img
-        src={workCoverSrc(work.slug)}
-        alt=""
-        width={1200}
-        height={676}
-        className="aspect-video w-full object-cover"
-      />
+      <WorkCover work={work} />
       <figcaption className="border-t border-border px-4 py-2 text-xs text-faint">
-        示範畫面 · 示意資料，非正式環境
+        {hasWorkCover(work.slug)
+          ? "示範畫面 · 示意資料，非正式環境"
+          : "此案例尚無畫面截圖"}
       </figcaption>
     </figure>
   );

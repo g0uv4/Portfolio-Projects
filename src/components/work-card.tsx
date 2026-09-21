@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { workCoverSrc } from "@/components/work-shot";
+import { WorkCover } from "@/components/work-shot";
 import { CATEGORY_LABEL, STATUS_LABEL, type Work } from "@/content/types";
 
 export function WorkCard({
@@ -27,13 +27,7 @@ export function WorkCard({
         className="block"
         tabIndex={-1}
       >
-        <img
-          src={workCoverSrc(work.slug)}
-          alt=""
-          width={1200}
-          height={676}
-          className={compact ? "aspect-[16/7] w-full object-cover" : "aspect-video w-full object-cover"}
-        />
+        <WorkCover work={work} compact={compact} />
       </Link>
       <CardHeader>
         <div className="flex flex-wrap items-center gap-2">

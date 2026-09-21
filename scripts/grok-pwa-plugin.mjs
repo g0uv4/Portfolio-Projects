@@ -52,6 +52,13 @@ function serveGrokPwa(middlewares) {
       return;
     }
 
+    if (pathOnly === "/favicon.ico") {
+      res.statusCode = 302;
+      res.setHeader("location", "/favicon.svg");
+      res.end();
+      return;
+    }
+
     if (pathOnly === "/__grok/manifest.webmanifest" || pathOnly === "/__grok/manifest.json") {
       const body = Buffer.from(renderWebManifest(requestHost(req)), "utf8");
       res.statusCode = 200;

@@ -22,17 +22,29 @@ import { renderInstallPage } from "./grok-pwa-plugin.mjs";
 const TEMPLATE_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 test("injects before </head>", () => {
-  const out = injectGrokPwaHead("<html><head><title>x</title></head><body></body></html>");
+  const out = injectGrokPwaHead("<html><head><title>x</title></head><body></body></html>", {
+    host: "wild-race.grok.me",
+  });
   assert.match(out, /rel="manifest"/);
   assert.match(out, /apple-touch-icon/);
   assert.match(out, /grok-app-builder\/extensions\.js/);
   assert.ok(out.indexOf("manifest") < out.indexOf("</head>"));
 });
 
+test("skips Grok App chrome on the published Vercel host", () => {
+  const out = injectGrokPwaHead("<html><head><title>x</title></head><body></body></html>", {
+    host: "portfolio-projects-alpha.vercel.app",
+  });
+  assert.doesNotMatch(out, /grok-app-builder\/extensions\.js/);
+  assert.doesNotMatch(out, /__grok\/manifest\.webmanifest/);
+  assert.doesNotMatch(out, /__grok\/icon-180\.png/);
+});
+
 test("injects the extensions script without a project id", () => {
   const out = injectGrokPwaHead("<html><head></head></html>", {
     appName: "Demo",
     projectId: "",
+    host: "wild-race.grok.me",
   });
   assert.match(out, /src="https:\/\/grok\.com\/grok-app-builder\/extensions\.js" defer/);
   assert.doesNotMatch(out, /grok-project-id/);
@@ -44,6 +56,7 @@ test("injects project id on the script and meta when provided", () => {
   const out = injectGrokPwaHead("<html><head></head></html>", {
     appName: "Demo",
     projectId: "proj-123",
+    host: "wild-race.grok.me",
   });
   assert.match(out, /name="grok-project-id" content="proj-123"/);
   assert.match(out, /data-project-id="proj-123"/);
@@ -51,7 +64,7 @@ test("injects project id on the script and meta when provided", () => {
 });
 
 test("does not duplicate grok:app_id", () => {
-  const ctx = { appName: "Demo", projectId: "proj-123" };
+  const ctx = { appName: "Demo", projectId: "proj-123", host: "wild-race.grok.me" };
   const once = injectGrokPwaHead("<html><head></head></html>", ctx);
   const twice = injectGrokPwaHead(once, ctx);
   assert.equal(once, twice);
@@ -381,7 +394,7 @@ test("streaming injector matches </HEAD> case-insensitively", () => {
 });
 
 test("does not duplicate the extensions script", () => {
-  const ctx = { appName: "Demo", projectId: "proj-123" };
+  const ctx = { appName: "Demo", projectId: "proj-123", host: "wild-race.grok.me" };
   const once = injectGrokPwaHead("<html><head></head></html>", ctx);
   const twice = injectGrokPwaHead(once, ctx);
   assert.equal(once, twice);
@@ -395,12 +408,22 @@ test("is idempotent", () => {
 });
 
 test("uses the app name in the injected title tag", () => {
-  const out = injectGrokPwaHead("<html><head></head></html>", { appName: "Wild Race" });
+  const out = injectGrokPwaHead("<html><head></head></html>", {
+    appName: "Wild Race",
+    host: "wild-race.grok.me",
+    site: {},
+    cwd: mkdtempSync(join(tmpdir(), "grok-title-")),
+  });
   assert.match(out, /apple-mobile-web-app-title" content="Wild Race"/);
 });
 
 test("streaming injector handles </head> split across chunks", () => {
-  const injector = createHeadInjector({ appName: "Wild Race" });
+  const injector = createHeadInjector({
+    appName: "Wild Race",
+    host: "wild-race.grok.me",
+    site: {},
+    cwd: mkdtempSync(join(tmpdir(), "grok-stream-")),
+  });
   const chunks = [
     ...injector.push("<html><head><title>x</title></he"),
     ...injector.push("ad><body>hello</body></html>"),
@@ -420,7 +443,11 @@ test("streaming injector passes post-head chunks through untouched", () => {
 });
 
 test("streaming injector falls back when no </head> is seen", () => {
-  const injector = createHeadInjector();
+  const injector = createHeadInjector({
+    host: "wild-race.grok.me",
+    site: {},
+    cwd: mkdtempSync(join(tmpdir(), "grok-flush-")),
+  });
   assert.deepEqual(injector.push("<html><head>"), []);
   const out = Buffer.concat(injector.flush()).toString("utf8");
   assert.match(out, /rel="manifest"/);

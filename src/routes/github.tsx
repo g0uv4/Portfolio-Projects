@@ -43,9 +43,8 @@ function GithubPage() {
       </p>
 
       <p className="mt-8 text-sm text-muted">
-        公開倉庫 {publicRepos}
-        <span className="text-faint"> · </span>
-        即時對上 {liveCount}
+        GitHub 上有 {publicRepos} 個公開倉。作品庫裡對得上的公開案例有 {liveCount}{" "}
+        件。
       </p>
 
       {snapshot.ok ? (

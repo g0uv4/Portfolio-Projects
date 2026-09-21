@@ -20,8 +20,9 @@ function AboutPage() {
       <div className="grid gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(16rem,0.8fr)]">
         <article>
           <h1 className="text-4xl font-semibold tracking-tight">
-            從採購現場長出來的系統。
+            {profile.latin}
           </h1>
+          <p className="mt-2 text-sm text-muted">{profile.role}</p>
           <p className="mt-5 text-sm leading-relaxed text-muted">{profile.blurb}</p>
           <p className="mt-4 text-sm leading-relaxed text-muted">{profile.now}</p>
           <p className="mt-4 text-sm leading-relaxed text-muted">
@@ -37,7 +38,7 @@ function AboutPage() {
             </p>
           </section>
           <section>
-            <h2 className="text-sm font-semibold">採購／定價</h2>
+            <h2 className="text-sm font-semibold">採購經歷</h2>
             <p className="mt-2 text-sm leading-relaxed text-muted">
               五年採購、一年於前東擔任產品線窗口，約十家供應商。EOL
               料轉用與自動化交期報表，讓過期料與交期異動能在出貨前被看見。

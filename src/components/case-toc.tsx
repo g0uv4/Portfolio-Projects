@@ -1,8 +1,8 @@
-import { ArrowUpRight, Lock } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import type { Work, WorkLiveLink } from "@/content/types";
+import { publicGithubHref } from "@/content/works";
 import { cn } from "@/lib/utils";
 
 const LINKS = [
@@ -12,10 +12,7 @@ const LINKS = [
 ] as const;
 
 export function CaseToc({ work }: { work: Work }) {
-  const githubUrl = work.github
-    ? `https://github.com/${work.github.owner}/${work.github.repo}`
-    : null;
-  const isPrivate = work.github?.visibility === "private";
+  const githubHref = publicGithubHref(work);
 
   return (
     <div className="no-print sticky top-16 z-10 border-y border-border bg-bg">
@@ -46,27 +43,13 @@ export function CaseToc({ work }: { work: Work }) {
           ))}
         </nav>
         <div className="flex flex-wrap gap-2">
-          {githubUrl ? (
-            isPrivate ? (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button asChild variant="outline" size="sm">
-                    <a href={githubUrl} target="_blank" rel="noreferrer">
-                      <Lock className="size-3.5" />
-                      私人倉
-                    </a>
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>只顯示名稱與摘要，不含原始碼。</TooltipContent>
-              </Tooltip>
-            ) : (
-              <Button asChild variant="outline" size="sm">
-                <a href={githubUrl} target="_blank" rel="noreferrer">
-                  GitHub
-                  <ArrowUpRight className="size-4" />
-                </a>
-              </Button>
-            )
+          {githubHref ? (
+            <Button asChild variant="outline" size="sm">
+              <a href={githubHref} target="_blank" rel="noreferrer">
+                GitHub
+                <ArrowUpRight className="size-4" />
+              </a>
+            </Button>
           ) : null}
           {work.live ? <WorkLiveLink live={work.live} /> : null}
         </div>

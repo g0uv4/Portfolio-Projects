@@ -453,6 +453,12 @@ export function githubKey(owner: string, repo: string): string {
   return `${owner}/${repo}`.toLowerCase();
 }
 
+export function publicGithubHref(work: Pick<Work, "github">): string | null {
+  const gh = work.github;
+  if (!gh || gh.visibility !== "public") return null;
+  return `https://github.com/${gh.owner}/${gh.repo}`;
+}
+
 export function workByRepo(owner: string, repo: string): Work | undefined {
   const key = githubKey(owner, repo);
   return works.find(

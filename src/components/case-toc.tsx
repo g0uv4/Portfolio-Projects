@@ -21,6 +21,17 @@ export function CaseToc({ work }: { work: Work }) {
     <div className="no-print sticky top-16 z-10 border-y border-border bg-bg">
       <div className="flex flex-wrap items-center gap-2 py-2">
         <nav aria-label="本頁章節" className="flex min-w-0 flex-1 flex-wrap gap-1">
+          {work.slug === "psi-dashboard" ? (
+            <a
+              href="#demo"
+              className={cn(
+                "inline-flex h-11 items-center px-3 text-sm text-muted",
+                "transition-colors duration-150 hover:text-accent",
+              )}
+            >
+              展示站
+            </a>
+          ) : null}
           {LINKS.map((link) => (
             <a
               key={link.href}

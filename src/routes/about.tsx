@@ -39,7 +39,7 @@ function AboutPage() {
           <section>
             <h2 className="text-sm font-semibold">採購／定價</h2>
             <p className="mt-2 text-sm leading-relaxed text-muted">
-              五年採購、一年於前東擔任產品線窗口。月採購約 2,000 萬美元，約十家供應商。EOL
+              五年採購、一年於前東擔任產品線窗口，約十家供應商。EOL
               料轉用與自動化交期報表，讓過期料與交期異動能在出貨前被看見。
             </p>
           </section>

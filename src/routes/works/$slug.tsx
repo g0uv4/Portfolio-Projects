@@ -144,10 +144,7 @@ function WorkDetail() {
       {related.length > 0 ? (
         <section className="no-print mt-16">
           <h2 className="text-xl font-semibold tracking-tight">
-            同一產線
-            <span className="ml-2 text-sm font-normal text-faint">
-              {PIPELINE_LABEL[work.pipeline]}
-            </span>
+            相關作品
           </h2>
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             {related.map((item) => (

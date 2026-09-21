@@ -1,14 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowUpRight, Lock } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { profile } from "@/content/profile";
 import { fetchGithubSnapshot, mergeCatalog, type CatalogRepo } from "@/lib/github";
 
 export const Route = createFileRoute("/github")({
   loader: async () => {
     const snapshot = await fetchGithubSnapshot();
-    return { snapshot, catalog: mergeCatalog(snapshot) };
+    return {
+      snapshot,
+      catalog: mergeCatalog(snapshot).filter((item) => item.visibility === "public"),
+    };
   },
   component: GithubPage,
 });
@@ -16,7 +18,6 @@ export const Route = createFileRoute("/github")({
 function GithubPage() {
   const { snapshot, catalog } = Route.useLoaderData();
   const liveCount = catalog.filter((item) => item.live).length;
-  const privateCount = catalog.filter((item) => item.visibility === "private").length;
   const publicRepos = snapshot.profile ? String(snapshot.profile.publicRepos) : "—";
 
   return (
@@ -32,21 +33,18 @@ function GithubPage() {
         >
           {profile.handle}
         </a>{" "}
-        讀取公開倉庫狀態，只列出作品庫已登錄的案例。私人倉只顯示名稱與摘要，不含原始碼。
+        讀取公開倉庫狀態，只列出作品庫已登錄的公開案例。
       </p>
 
       <p className="mt-8 text-sm text-muted">
         公開倉庫 {publicRepos}
         <span className="text-faint"> · </span>
         即時對上 {liveCount}
-        <span className="text-faint"> · </span>
-        私人（已登錄）{privateCount}
       </p>
 
       {snapshot.ok ? (
         <p className="mt-2 font-mono text-xs text-faint">
           讀取於 {formatTime(snapshot.fetchedAt)}
-          {snapshot.tokenScoped ? " · 已使用部署端 token，可含私人倉" : " · 未設定 token，僅公開倉"}
         </p>
       ) : (
         <p className="mt-2 text-sm text-warn">
@@ -96,21 +94,6 @@ function RepoRow({ item }: { item: CatalogRepo }) {
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
           <p className="font-semibold text-fg">{item.title}</p>
-          {item.visibility === "private" ? (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <span className="inline-flex items-center">
-                  <Badge tone="muted">
-                    <Lock className="mr-1 size-3" />
-                    private
-                  </Badge>
-                </span>
-              </TooltipTrigger>
-              <TooltipContent>私人倉只顯示名稱與摘要，不含原始碼。</TooltipContent>
-            </Tooltip>
-          ) : (
-            <Badge tone="muted">public</Badge>
-          )}
           <Badge tone={item.live ? "fg" : "muted"}>{item.live ? "live" : "catalog"}</Badge>
         </div>
         <p className="mt-1 line-clamp-2 text-sm text-muted">{item.description}</p>
@@ -130,27 +113,15 @@ function RepoRow({ item }: { item: CatalogRepo }) {
             案例
           </Link>
         ) : null}
-          {item.visibility === "private" ? (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <span className="inline-flex h-11 items-center gap-1 px-3 text-sm text-muted">
-                  <Lock className="size-3.5" />
-                  私人
-                </span>
-              </TooltipTrigger>
-              <TooltipContent>私人倉不開放原始碼連結。</TooltipContent>
-            </Tooltip>
-          ) : (
-            <a
-              href={item.url}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex h-11 items-center gap-1 px-3 text-sm text-muted hover:text-fg"
-            >
-              <ArrowUpRight className="size-4" />
-              GitHub
-            </a>
-          )}
+        <a
+          href={item.url}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex h-11 items-center gap-1 px-3 text-sm text-muted hover:text-fg"
+        >
+          <ArrowUpRight className="size-4" />
+          GitHub
+        </a>
       </div>
     </li>
   );

@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { CATEGORY_LABEL, PIPELINE_LABEL, STATUS_LABEL } from "@/content/types";
-import { getWork, relatedWorks } from "@/content/works";
+import { getWork, publicGithubHref, relatedWorks } from "@/content/works";
 
 export const Route = createFileRoute("/works/$slug")({
   loader: ({ params }) => {
@@ -125,10 +125,10 @@ function WorkDetail() {
           <AccordionContent>
             <dl>
               <Side dt="技術棧" dd={work.stack.join(" · ")} />
-              {work.github ? (
+              {publicGithubHref(work) && work.github ? (
                 <Side
                   dt="倉庫"
-                  dd={`${work.github.owner}/${work.github.repo}（${work.github.visibility === "private" ? "私人" : "公開"}）`}
+                  dd={`${work.github.owner}/${work.github.repo}`}
                 />
               ) : null}
               <Side dt="產線" dd={PIPELINE_LABEL[work.pipeline]} />

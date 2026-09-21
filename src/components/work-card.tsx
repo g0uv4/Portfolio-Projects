@@ -1,5 +1,4 @@
 import { Link } from "@tanstack/react-router";
-import { Lock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { WorkPreviewDialog } from "@/components/work-preview";
 import { workCoverSrc } from "@/components/work-shot";
 import { CATEGORY_LABEL, STATUS_LABEL, type Work } from "@/content/types";
@@ -22,8 +20,6 @@ export function WorkCard({
   work: Work;
   compact?: boolean;
 }) {
-  const isPrivate = work.github?.visibility === "private";
-
   return (
     <Card className="card-hover overflow-hidden">
       <Link
@@ -45,17 +41,6 @@ export function WorkCard({
           <Badge tone="muted">{CATEGORY_LABEL[work.category]}</Badge>
           <Badge tone="muted">{work.year}</Badge>
           {compact ? null : <Badge tone="fg">{STATUS_LABEL[work.status]}</Badge>}
-          {isPrivate ? (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <span className="inline-flex size-11 items-center justify-center text-faint">
-                  <Lock className="size-3" />
-                  <span className="sr-only">私人倉</span>
-                </span>
-              </TooltipTrigger>
-              <TooltipContent>私人倉只顯示名稱與摘要，不含原始碼。</TooltipContent>
-            </Tooltip>
-          ) : null}
         </div>
         <CardTitle>
           <Link

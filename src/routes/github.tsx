@@ -5,6 +5,12 @@ import { profile } from "@/content/profile";
 import { fetchGithubSnapshot, mergeCatalog, type CatalogRepo } from "@/lib/github";
 
 export const Route = createFileRoute("/github")({
+  head: () => ({
+    meta: [
+      { title: "GitHub · ZOLAND WORKS" },
+      { property: "og:title", content: "GitHub · ZOLAND WORKS" },
+    ],
+  }),
   loader: async () => {
     const snapshot = await fetchGithubSnapshot();
     return {

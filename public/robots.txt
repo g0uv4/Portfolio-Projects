@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://portfolio-projects-alpha.vercel.app/sitemap.xml

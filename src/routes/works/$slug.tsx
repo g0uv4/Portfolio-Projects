@@ -28,15 +28,24 @@ export const Route = createFileRoute("/works/$slug")({
     if (!work) throw notFound();
     return { work, related: relatedWorks(work) };
   },
-  head: ({ loaderData }) => ({
-    meta: [
-      {
-        title: loaderData?.work
-          ? `${loaderData.work.title} · ZOLAND WORKS`
-          : "ZOLAND WORKS",
-      },
-    ],
-  }),
+  head: ({ loaderData }) => {
+    const title = loaderData?.work
+      ? `${loaderData.work.title} · ZOLAND WORKS`
+      : "ZOLAND WORKS";
+    const description = loaderData?.work?.summary;
+    return {
+      meta: [
+        { title },
+        { property: "og:title", content: title },
+        ...(description
+          ? [
+              { name: "description", content: description },
+              { property: "og:description", content: description },
+            ]
+          : []),
+      ],
+    };
+  },
   component: WorkDetail,
 });
 
@@ -111,7 +120,7 @@ function WorkDetail() {
         </div>
       </section>
 
-      <Accordion type="multiple" className="mt-10 max-w-3xl">
+      <Accordion type="multiple" defaultValue={["meta"]} className="mt-10 max-w-3xl">
         <AccordionItem value="method">
           <AccordionTrigger>作法步驟</AccordionTrigger>
           <AccordionContent>

@@ -4,7 +4,15 @@ import { Button } from "@/components/ui/button";
 import { profile } from "@/content/profile";
 import { workStats } from "@/content/works";
 
-export const Route = createFileRoute("/about")({ component: AboutPage });
+export const Route = createFileRoute("/about")({
+  head: () => ({
+    meta: [
+      { title: "關於 · ZOLAND WORKS" },
+      { property: "og:title", content: "關於 · ZOLAND WORKS" },
+    ],
+  }),
+  component: AboutPage,
+});
 
 function AboutPage() {
   return (

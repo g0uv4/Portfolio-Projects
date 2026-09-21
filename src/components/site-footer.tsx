@@ -15,9 +15,9 @@ export function SiteFooter() {
           <Link to="/about" className="hover:text-fg">
             關於
           </Link>
-          <a href={profile.githubUrl} target="_blank" rel="noreferrer" className="hover:text-fg">
-            {profile.handle}
-          </a>
+          <Link to="/github" className="hover:text-fg">
+            GitHub
+          </Link>
         </p>
       </div>
     </footer>

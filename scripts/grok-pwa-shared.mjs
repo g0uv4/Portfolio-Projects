@@ -362,17 +362,25 @@ export function grokOgHeadTags({
   if (String(site.type ?? "").toLowerCase() === "x:game") {
     tags.push(`<meta property="og:type" content="x:game">`);
   }
-  if (publicHost) {
-    const asset = resolveOgCardAsset(site, cwd);
-    const custom = Boolean(asset);
-    let image = custom
-      ? `https://${publicHost}${asset.startsWith("/") ? asset : `/${asset}`}`
-      : `${ogServiceUrl()}/v1/card.png?host=${encodeURIComponent(publicHost)}&title=${encodeURIComponent(title)}`;
-    const color = !custom ? placeholderCardColor(site) : "";
+  const asset = resolveOgCardAsset(site, cwd);
+  const origin = publicHost
+    ? `https://${publicHost}`
+    : String(site.origin ?? "").replace(/\/$/, "");
+  if (asset && origin) {
+    const image = `${origin}${asset.startsWith("/") ? asset : `/${asset}`}`;
+    tags.push(`<meta property="og:image" content="${escapeHtml(image)}">`);
+    tags.push(`<meta property="og:image:width" content="1200">`);
+    tags.push(`<meta property="og:image:height" content="630">`);
+    tags.push(`<meta name="twitter:image" content="${escapeHtml(image)}">`);
+  } else if (publicHost) {
+    let image = `${ogServiceUrl()}/v1/card.png?host=${encodeURIComponent(publicHost)}&title=${encodeURIComponent(title)}`;
+    const color = placeholderCardColor(site);
     if (color) image += `&color=${encodeURIComponent(color)}`;
     tags.push(`<meta property="og:image" content="${escapeHtml(image)}">`);
     tags.push(`<meta property="og:image:width" content="1200">`);
     tags.push(`<meta property="og:image:height" content="630">`);
+  }
+  if (publicHost) {
     const banner = String(site.banner ?? "").trim();
     if (banner) {
       const bannerUrl = `https://${publicHost}${banner.startsWith("/") ? banner : `/${banner}`}`;

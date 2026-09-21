@@ -2,5 +2,7 @@
   "title": "ZOLAND WORKS",
   "type": "website",
   "card": "custom",
+  "image": "/og.jpg",
+  "origin": "https://portfolio-projects-alpha.vercel.app",
   "description": "Zoland Li 的模組化作品庫：VBA、網頁與桌面工具，含問題、作法、量化成效。"
 }

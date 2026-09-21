@@ -11,6 +11,8 @@ const COVERED = new Set([
   "combin-backlog",
   "oracle-sql",
   "side-vba",
+  "coloring-book",
+  "what-is-the-data-saying",
 ]);
 
 export function workCoverSrc(slug: string) {
@@ -75,9 +77,13 @@ export function WorkShot({ work }: { work: Work }) {
     <figure className="overflow-hidden rounded-lg bg-surface shadow-[var(--shadow-border)]">
       <WorkCover work={work} />
       <figcaption className="border-t border-border px-4 py-2 text-xs text-faint">
-        {hasWorkCover(work.slug)
-          ? "示範畫面 · 示意資料，非正式環境"
-          : "此案例尚無畫面截圖"}
+        {work.slug === "coloring-book"
+          ? "線稿示範 · 非正式照片"
+          : work.slug === "what-is-the-data-saying"
+            ? "啞鈴圖示意 · 非正式數字"
+            : hasWorkCover(work.slug)
+              ? "示範畫面 · 示意資料，非正式環境"
+              : "此案例尚無畫面截圖"}
       </figcaption>
     </figure>
   );

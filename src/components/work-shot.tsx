@@ -35,7 +35,7 @@ export function WorkCover({
       <div
         className={
           compact
-            ? "flex aspect-[16/7] items-end bg-surface-2 px-4 py-3"
+            ? "flex h-full min-h-24 items-end bg-surface-2 px-3 py-3 sm:aspect-[2/1] sm:h-auto sm:px-4"
             : "flex aspect-video items-end bg-surface-2 px-5 py-4"
         }
       >
@@ -49,7 +49,11 @@ export function WorkCover({
       alt=""
       width={1200}
       height={676}
-      className={compact ? "aspect-[16/7] w-full object-cover" : "aspect-video w-full object-cover"}
+      className={
+        compact
+          ? "h-full w-full object-cover object-left-top outline-none transition-transform duration-300 group-hover:scale-[1.02] sm:aspect-[2/1] sm:h-auto"
+          : "aspect-video w-full object-cover object-top outline-none transition-transform duration-300 group-hover:scale-[1.02]"
+      }
     />
   );
 }

@@ -81,7 +81,7 @@ function WorkDetail() {
         </div>
         <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">{work.title}</h1>
         <p className="mt-2 text-lg text-muted">{work.subtitle}</p>
-        <p className="mt-4 text-sm leading-relaxed text-muted">{work.summary}</p>
+        <p className="mt-5 text-base leading-relaxed text-muted">{work.summary}</p>
       </header>
 
       <div className="mt-8">
@@ -91,21 +91,21 @@ function WorkDetail() {
       <CaseToc work={work} />
 
       <section id="problem" className="mt-10 max-w-3xl scroll-mt-32">
-        <h2 className="text-xl font-semibold">問題</h2>
-        <p className="mt-3 text-sm leading-relaxed text-muted">{work.problem.context}</p>
-        <p className="mt-3 text-sm leading-relaxed text-muted">{work.problem.pain}</p>
+        <h2 className="section-title">問題</h2>
+        <p className="mt-3 text-[0.9375rem] leading-7 text-muted">{work.problem.context}</p>
+        <p className="mt-3 text-[0.9375rem] leading-7 text-muted">{work.problem.pain}</p>
       </section>
 
       <Separator className="mt-10 max-w-3xl" />
 
       <section id="approach" className="mt-10 max-w-3xl scroll-mt-32">
-        <h2 className="text-xl font-semibold">作法</h2>
-        <p className="mt-3 text-sm leading-relaxed text-muted">{work.approach.overview}</p>
+        <h2 className="section-title">作法</h2>
+        <p className="mt-3 text-[0.9375rem] leading-7 text-muted">{work.approach.overview}</p>
       </section>
 
       <section id="results" className="mt-10 max-w-3xl scroll-mt-32">
-        <h2 className="text-xl font-semibold">成效</h2>
-        <p className="mt-3 text-sm leading-relaxed text-muted">{work.results.narrative}</p>
+        <h2 className="section-title">成效</h2>
+        <p className="mt-3 text-[0.9375rem] leading-7 text-muted">{work.results.narrative}</p>
         <div className="mt-6">
           <MetricTable
             metrics={work.results.metrics}
@@ -115,14 +115,14 @@ function WorkDetail() {
       </section>
 
       <section id="method" className="mt-10 max-w-3xl scroll-mt-32">
-        <h2 className="text-xl font-semibold">作法步驟</h2>
+        <h2 className="section-title">作法步驟</h2>
         <div className="mt-4">
           <ProcessSteps steps={work.approach.steps} />
         </div>
       </section>
 
       <section id="meta" className="mt-10 max-w-3xl scroll-mt-32">
-        <h2 className="text-xl font-semibold">技術與倉庫</h2>
+        <h2 className="section-title">技術與倉庫</h2>
         <dl className="mt-4">
           <Side dt="技術棧" dd={work.stack.join(" · ")} />
           {publicGithubHref(work) && work.github ? (
@@ -143,10 +143,10 @@ function WorkDetail() {
 
       {related.length > 0 ? (
         <section className="no-print mt-16">
-          <h2 className="text-xl font-semibold tracking-tight">
+          <h2 className="section-title">
             相關作品
           </h2>
-          <div className="mt-5 grid gap-4 sm:grid-cols-2">
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
             {related.map((item) => (
               <WorkCard key={item.slug} work={item} compact />
             ))}

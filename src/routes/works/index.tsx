@@ -62,9 +62,9 @@ function WorksIndex() {
   }
 
   return (
-    <main className="wrap py-12 sm:py-16">
-      <h1 className="text-4xl font-semibold tracking-tight">作品庫</h1>
-      <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted">
+    <main className="wrap py-12 sm:py-20">
+      <h1 className="text-[2.25rem] leading-tight font-semibold tracking-tight sm:text-5xl">作品庫</h1>
+      <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted">
         每一件是獨立案例：問題、作法、成效。沒有公開數字的項目只寫機制，不編造成效。
       </p>
 
@@ -95,7 +95,7 @@ function WorksIndex() {
           {visible.length === 0 ? (
             <p className="py-10 text-sm text-muted">沒有符合的作品。</p>
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {visible.map((work) => (
                 <WorkCard key={work.slug} work={work} />
               ))}
